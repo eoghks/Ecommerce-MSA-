@@ -1,3 +1,4 @@
 rootProject.name = 'ecommerce'
 
 include 'serviceDiscovery'
+project(':serviceDiscovery').projectDir = file('serviceDiscovery')
