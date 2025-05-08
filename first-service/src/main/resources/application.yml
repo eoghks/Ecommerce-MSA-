@@ -3,9 +3,13 @@ spring:
     name: first-service
 
 server:
-  port: 8081
+  port: 8001
 
 eureka:
   client:
     fetch-registry: false
     register-with-eureka: false
+
+logging:
+  level:
+    org.springframework.web: DEBUG
