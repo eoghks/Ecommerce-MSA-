@@ -8,6 +8,8 @@ import com.example.userService.vo.RequestUser;
 import com.example.userService.vo.ResponseUser;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,23 +17,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/")
 public class UserController {
-    //private Environment env;
+    private Environment env;
     private Greeting greeting;
     private UserService userService;
-    /*
+
     @Autowired
-    public UserController(Environment env) {
+    public UserController(Environment env, Greeting greeting, UserService userService) {
         this.env = env;
-    }*/
-    public UserController(Greeting greeting, UserService userService) {
         this.greeting = greeting;
         this.userService = userService;
     }
 
     @GetMapping("/health_check")
     public String healthCheck(){
-        return "User Service is Working";
+        return String.format("User Service is Working on PORT %s", env.getProperty("local.server.port"));
     }
+
     @GetMapping("/welcome")
     public String welcome(){
         //return env.getProperty("greeting.message");

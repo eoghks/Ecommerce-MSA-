@@ -1,6 +1,6 @@
 spring:
     application:
-      name: userService
+      name: user-service
     h2:
       console:
         enabled: true
@@ -33,6 +33,7 @@ logging:
   level:
     com.netflix.discovery: DEBUG
     com.netflix.discovery.shared.transport: DEBUG
+    org.springframework.web: DEBUG
 
 greeting:
   message: Welcome to the Simple E-Commerce!!

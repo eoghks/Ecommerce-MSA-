@@ -16,6 +16,7 @@ public class WebSecurity {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/users/**").permitAll()
                     .requestMatchers("/h2-console/**").permitAll()
+                    .anyRequest().permitAll()
             );
         return http.build();
     }
