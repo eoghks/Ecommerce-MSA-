@@ -14,7 +14,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: create-drop
     show-sql: true
     generate-ddl: true
   sql:
