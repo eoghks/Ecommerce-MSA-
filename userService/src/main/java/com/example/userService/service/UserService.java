@@ -6,7 +6,7 @@ import com.example.userService.entity.UserEntity;
 import java.util.List;
 
 public interface UserService {
-    UserDto CreateUser(UserDto userDto);
+    UserDto createUser(UserDto userDto);
     UserDto getUserByUserId(String userId);
     List<UserEntity> getUserByAll();
 }
