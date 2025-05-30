@@ -16,6 +16,12 @@ spring:
             - Path=/user-service/**
           filters:
             - StripPrefix=1
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/catalog-service/**
+          filters:
+            - StripPrefix=1
         - id: first-service
 #          uri: http://localhost:8001/
           uri: lb://FIRST-SERVICE
