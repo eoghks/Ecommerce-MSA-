@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,5 +60,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserEntity> getUserByAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user = userRepository.findByEmail(username);
+        if(user == null) {
+            throw new UserNotFoundException(username);
+        }
+
+        return new User(user.getEmail(), user.getEncryptedPwd(),
+                true, true, true, true,
+                new ArrayList<>());
     }
 }
