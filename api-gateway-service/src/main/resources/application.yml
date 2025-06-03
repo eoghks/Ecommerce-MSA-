@@ -28,8 +28,10 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
+            - Method=GET
           filters:
             - StripPrefix=1
+            - AuthorizationHeaderFilter
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
@@ -75,6 +77,9 @@ eureka:
         fetch-registry: true
         service-url:
             defaultZone: http://127.0.0.1:8761/eureka
+
+token:
+  secret: uFnUNMKvWXpGrMxu1VJQGv0l8ZdPQqv+7byzbi+BL7RzFzP3zjAjpOT2epzQGmMgG9KjJ7EewDUWY9muRnU1FQ== #
 
 logging:
   level:
