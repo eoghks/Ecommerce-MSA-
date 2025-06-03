@@ -12,4 +12,7 @@ eureka:
   server:
     eviction-interval-timer-in-ms: 10000
     enable-self-preservation: false
+  instance:
+    lease-renewal-interval-in-seconds: 10       # 클라이언트가 5초마다 heartbeat 보내도록 설정
+    lease-expiration-duration-in-seconds: 15
 
