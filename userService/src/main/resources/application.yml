@@ -35,5 +35,9 @@ logging:
     com.netflix.discovery.shared.transport: DEBUG
     org.springframework.web: DEBUG
 
+token:
+  expiration_time: 86400000 #1day
+  secret: uFnUNMKvWXpGrMxu1VJQGv0l8ZdPQqv+7byzbi+BL7RzFzP3zjAjpOT2epzQGmMgG9KjJ7EewDUWY9muRnU1FQ== #
+
 greeting:
   message: Welcome to the Simple E-Commerce!!
