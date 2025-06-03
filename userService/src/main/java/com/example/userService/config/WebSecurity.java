@@ -31,12 +31,12 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            .formLogin(form -> form.disable())
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                    .requestMatchers("/users/**").authenticated()
                     .requestMatchers("/h2-console/**").permitAll()
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
             )
             .addFilter(new AuthenticationFilter(authenticationManager, userService, env));
         return http.build();
