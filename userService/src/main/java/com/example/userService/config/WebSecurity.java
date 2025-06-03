@@ -38,7 +38,7 @@ public class WebSecurity {
                     .requestMatchers("/h2-console/**").permitAll()
                     .anyRequest().permitAll()
             )
-            .addFilter(new AuthenticationFilter(authenticationManager));
+            .addFilter(new AuthenticationFilter(authenticationManager, userService, env));
         return http.build();
     }
 

@@ -1,23 +1,32 @@
 package com.example.userService.config;
 
+import com.example.userService.dto.UserDto;
+import com.example.userService.service.UserService;
 import com.example.userService.vo.RequestLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    public AuthenticationFilter(AuthenticationManager authenticationManager) {
+    private UserService userService;
+    private Environment env;
+
+    public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, Environment env) {
         super.setAuthenticationManager(authenticationManager);
+        this.userService = userService;
+        this.env = env;
     }
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -38,6 +47,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-        //super.successfulAuthentication(request, response, chain, authResult);
+        String userName = ((User)authResult.getPrincipal()).getUsername();
+        UserDto userDetails = userService.getUserDetailsByEmail(userName);
     }
 }
