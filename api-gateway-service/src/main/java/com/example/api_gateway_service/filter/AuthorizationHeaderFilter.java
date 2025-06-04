@@ -1,11 +1,13 @@
 package com.example.api_gateway_service.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -16,11 +18,13 @@ import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @Component
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
     private Environment env;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public AuthorizationHeaderFilter(Environment env) {
         super(Config.class);
@@ -83,9 +87,21 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     private Mono<Void> onError(ServerWebExchange exchange, String errorMessage, HttpStatus httpStatus) {
         ServerHttpResponse response =  exchange.getResponse();
+        response.getHeaders().add("Content-Type", "application/json; charset=UTF-8");
         response.setStatusCode(httpStatus);
 
         log.error(errorMessage);
-        return response.setComplete();
+        Map<String, String> errorResponse = Map.of(
+                "error", httpStatus.toString(),
+                "message", errorMessage
+        );
+        try {
+            byte[] bytes = objectMapper.writeValueAsBytes(errorResponse);
+            DataBuffer buffer = response.bufferFactory().wrap(bytes);
+            return response.writeWith(Mono.just(buffer));
+        } catch (Exception e) {
+            log.error("Error serializing error response", e);
+            return response.setComplete();
+        }
     }
 }
